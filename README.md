@@ -25,6 +25,10 @@ stats, annotated_image = measure_image(image path, height or width , size, step 
 - `height or width` *(str)*: One of the following image paramters should be provided - `'h'` for height or `'w'` for width, followed by `size` *(float)* the image size in arbitrary units (defualt is centimeters).
 - `step size` *(float, optional)*: Used for the artifact filtration function (parameter optimization). Default value is 10. Decreasing the step size may provide better results but will increase the running time, and vice versa.
 
+# Image resolution
+
+For best results it is recommended to set the image resolution to ~40 pixels per cell length/width. Images with higher resolution may be adjusted accordingly. Images with initially lower resolution may result in poorer results.
+
 # Output data
 
 The function saves the following data to the local directory:
@@ -34,3 +38,6 @@ The function saves the following data to the local directory:
 3. `measurements.csv`: A .csv file containing a list of the cell width and length measurements (in absolute and euclidean values).
 4. `output_plot_1.png`: Histograms and PDFs of the cells' lengths and widths.
 
+# Reference
+
+please cite: https://doi.org/10.1016/j.jaecs.2025.100340
