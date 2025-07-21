@@ -21,13 +21,16 @@ You can call the function `measure_image` using the following script example:
 ```python
 from soot_foil_image_tool import measure_image
 
-stats = measure_image(image path, dimension , size, step size=10)
+stats, annotated_image = measure_image(image path, dimension , size, step size=10)
 ```
 This function processes a single image and produce measurement graphs and an annotated final image.
 
-Returns:
+Returns: 
 
-- `stats`: A dictionary with measurement arrays.
+A tuple (annotated_image, measurements) where:
+
+- `annotated_image`: The final image with drawn measurements.
+- `measurements`: A dictionary with measurement arrays.
         
 **Parameters:**
 - `image_path` *(str)*: Exact path to the soot foil image file (e.g. `'.../images/sample.png'`).
