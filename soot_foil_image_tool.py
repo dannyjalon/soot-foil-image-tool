@@ -573,7 +573,7 @@ def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=
     Parameters:
       image_path: Path to the image file.
       dimension: 'h' (height) or 'w' (width) to indicate the measurement basis.
-      size: Physical size corresponding to the selected dimension.
+      size: Physical size (in cm) corresponding to the selected dimension.
       debug: Set to 1 to show intermediate images.
       min_area_input: Fallback minimum area value (default: 40).
       divisor_of_max_area_input: Divisor used to compute the maximum area (default: 8).
@@ -593,26 +593,26 @@ def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=
      thickness_dot, thickness_line) = get_parameters_for_drawing()
 
     # Optimization loop for minimum area
-    # Optimization loop for minimum area
     Loss_list = []
     jun_percent_min = []
     min_area_candidates = []
     max_area_candidate = int(height * width / divisor_of_max_area_input)
-    with tqdm(range(0, max_area_candidate, step),
-              desc="Min Area Optimization") as pbar:
-        for m in pbar:
-            area_list, extLeft_list, extRight_list, extTop_list, extBot_list, Loss = detect_contours_in_image(
-                image, morphology_image, height, width, flag_height, flag_width, m, max_area_candidate)
-            junction_list, r_crit, jun_num = is_junction(extLeft_list, extRight_list, extTop_list, extBot_list,
-                                                         area_list,
-                                                         m)
-            Loss_list.append(100 - Loss)
-            min_area_candidates.append(m)
-            if (100 - Loss) == 0:
-                if pbar.total is not None:
-                    pbar.update(pbar.total - pbar.n)
-                pbar.close()
-                break
+    pbar = tqdm(range(0, max_area_candidate, step), desc="Min. Area Optimization")
+    for m in pbar:
+        area_list, extLeft_list, extRight_list, extTop_list, extBot_list, Loss = detect_contours_in_image(
+            image, morphology_image, height, width, flag_height, flag_width, m, max_area_candidate)
+        junction_list, r_crit, jun_num = is_junction(extLeft_list, extRight_list,
+                                                     extTop_list, extBot_list, area_list, m)
+
+        Loss_list.append(100 - Loss)
+        min_area_candidates.append(m)
+
+        if (100 - Loss) == 0:
+            pbar.n = pbar.total
+            pbar.refresh()
+            pbar.close()
+            break
+
         jun_percent_min.append(len(junction_list))
     if len(jun_percent_min) > 0:
         max_jun_percent_ind = jun_percent_min.index(max(jun_percent_min))
@@ -624,16 +624,29 @@ def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=
     Loss_list = []
     jun_percent_max = []
     max_area_candidates = []
+
     step_max = -abs(step) * 300
-    for M in tqdm(range(max_area_candidate, opt_min_area, step_max), desc="Max. Area Optimization"):
+    pbar = tqdm(range(max_area_candidate, opt_min_area, step_max),  # ↓
+                desc="Max. Area Optimization")
+
+    for M in pbar:
         area_list, extLeft_list, extRight_list, extTop_list, extBot_list, Loss = detect_contours_in_image(
-            image, morphology_image, height, width, flag_height, flag_width, opt_min_area, M)
-        junction_list, r_crit, jun_num = is_junction(extLeft_list, extRight_list, extTop_list, extBot_list, area_list,
-                                                     opt_min_area)
+            image, morphology_image, height, width, flag_height, flag_width,
+            opt_min_area, M)
+
+        junction_list, r_crit, jun_num = is_junction(
+            extLeft_list, extRight_list, extTop_list, extBot_list, area_list,
+            opt_min_area)
+
         Loss_list.append(100 - Loss)
         max_area_candidates.append(M)
+
         if (100 - Loss) == 0:
+            pbar.n = pbar.total
+            pbar.refresh()
+            pbar.close()
             break
+
         jun_percent_max.append(len(junction_list))
     if len(jun_percent_max) > 0:
         max_jun_percent_ind = jun_percent_max.index(max(jun_percent_max))
@@ -649,8 +662,15 @@ def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=
     # print_info(f'r_crit: {r_crit} pixels')
     # print_info(f'Runtime: {runtime:.2f} seconds')
 
+    # Draw junctions using the optimal parameters
+    area_list, extLeft_list, extRight_list, extTop_list, extBot_list, Loss = detect_contours_in_image(
+        image, morphology_image, height, width, flag_height, flag_width, opt_min_area, opt_max_area)
+    junction_list, r_crit, jun_num = is_junction(extLeft_list, extRight_list, extTop_list, extBot_list, area_list,
+                                                 opt_min_area)
+    image_annotated, _ = draw_circle_for_each_junction(image, junction_list, int(r_crit))
+
     # Draw contours using the optimal parameters
-    image_annotated, _ = draw_contours_in_image(image, morphology_image, height, width, flag_height, flag_width, opt_min_area, opt_max_area)
+    draw_contours_in_image(image, morphology_image, height, width, flag_height, flag_width, opt_min_area, opt_max_area)
 
     # Get final measurement values and draw arrows, etc.
     l_abs_values, l_euclidean_values, w_abs_values, w_euclidean_values = get_final_image(
