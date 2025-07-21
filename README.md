@@ -27,7 +27,7 @@ This function processes a single image and produce measurement graphs and an ann
 
 Returns:
 
-- `measurements`: A dictionary with measurement arrays.
+- `stats`: A dictionary with measurement arrays.
         
 **Parameters:**
 - `image_path` *(str)*: Exact path to the soot foil image file (e.g. `'.../images/sample.png'`).
