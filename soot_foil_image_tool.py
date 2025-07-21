@@ -708,7 +708,7 @@ def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=
             row = [measurements[key][i] if i < len(measurements[key]) else '' for key in headers]
             writer.writerow(row)
 
-    return image_annotated, measurements
+    return measurements
 
 
 # ----------------------- Main Block -----------------------
