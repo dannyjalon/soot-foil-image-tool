@@ -500,10 +500,8 @@ def get_statistics(args, image_name, size_value, height,
     print_info(w_print_abs)
     print_info(w_print_euclidean)
     print('--------------------------------------------')
-    x_min, x_max = plt.xlim()
-    x_min_area, x_max_area = plt.xlim()
 
-    # Create a new figure
+    # Create New Figure
     plt.figure(figsize=(12, 8))
 
     # Subplot 1: Height Abs
@@ -562,8 +560,7 @@ def get_statistics(args, image_name, size_value, height,
     plt.tight_layout()
     plt.savefig("output_plot_1.png", dpi=300)
     plt.show()
-    plt.close('all')
-    return x_min, x_max, x_min_area, x_max_area, l_abs_values_converted, l_euclidean_values_converted, w_abs_values_converted, w_euclidean_values_converted, area_list
+    return l_abs_values_converted, l_euclidean_values_converted, w_abs_values_converted, w_euclidean_values_converted, area_list
 
 
 def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=40, divisor_of_max_area_input=8):
@@ -683,8 +680,7 @@ def measure_image(image_path, dimension, size, step=10, debug=0, min_area_input=
         input = [image_path]
 
     dummy_args = DummyArgs()
-    (x_min, x_max, x_min_area, x_max_area,
-     l_abs_values_converted, l_euclidean_values_converted,
+    (l_abs_values_converted, l_euclidean_values_converted,
      w_abs_values_converted, w_euclidean_values_converted,
      area_list) = get_statistics(dummy_args, image_path, size, height,
                                  l_abs_values, l_euclidean_values, w_abs_values, w_euclidean_values, area_list)
