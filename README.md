@@ -51,6 +51,8 @@ The function saves the following data to the local directory:
 3. `measurements.csv`: A .csv file containing a list of the cell width and length measurements (in absolute and euclidean values).
 4. `output_plot_1.png`: Histograms and PDFs of the cells' lengths and widths.
 
+**Note:** To proceed to the next output image press the 'Esc' button.
+
 # License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
