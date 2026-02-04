@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Jalontzki"
+    given-names: "Daniel"
+    affiliation: "Tel Aviv University"
+title: "Soot-foil-image-tool"
+version: 1.0.0
+doi: "10.1016/j.jaecs.2025.100340"
+date-released: 2026-02-04
+url: "https://github.com/dannyjalon/soot-foil-image-tool"
