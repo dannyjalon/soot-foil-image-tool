@@ -8,7 +8,7 @@ This tool automatically measures the mean cell width and length of soot foil ima
 
 # Requirements
 
-This tool was tested on **Python 3.10**, and requires the following libraries: OpenCV, NumPy.
+This tool was tested on **Python 3.10**, and requires the following libraries: OpenCV, NumPy, SciPy, Matplotlib.
 
 # Demo
 
